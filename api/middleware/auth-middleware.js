@@ -31,13 +31,14 @@ function validateUser() {
         const user = await users.findByUsername(username)
         const passwordValid = await bcrypt.compare(password, user.password)
         
-if(!user || !passwordValid){
-    res.status(401).json({
-        message: "invalid credentials"
-    })
-}else if( !user || !password){
-    res.status(400).json({
+if(!username || !password){
+    return res.status(400).json({
         message: "username and password required"
+    })
+}
+else if(!user || !passwordValid){
+    return res.status(401).json({
+        message: "invalid credentials"
     })
 }else{
     next()
@@ -57,7 +58,7 @@ function signToken() {
         const token = jwt.sign({
             //this is the payload objet of the token === the data that we want encrypted in the token
             userID: user.id,
-        }, process.env.JWT_SECRET)
+        }, process.env.JWT_SECRET || "adelas spint challenge")
         
         req.token = token
         //console.log(req)

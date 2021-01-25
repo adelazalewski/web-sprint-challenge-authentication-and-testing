@@ -11,7 +11,7 @@ const {username, password} = req.body
 const newUser = await users.add({
     username,
     //here hash the password before saving it to the db with a time complexity of 12
-    password: await bcrypt.hash(password, 12)
+    password: await bcrypt.hash(password, 15)
 })
 
 res.status(201).json(newUser)
@@ -51,7 +51,7 @@ router.post('/login',validateUser(),signToken(), async (req, res) => {
     res.status(200).json({
         message: `Welcome ${username}!`,
         token: req.token
-    })
+    }).end()
   }catch(err) {
     next(err)
   }
